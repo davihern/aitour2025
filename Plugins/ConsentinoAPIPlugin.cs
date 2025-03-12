@@ -28,7 +28,7 @@ namespace ChatApp.WebApi.Plugins
            
             if(DNI == "12345678A")
             {
-               return new CustomerInfo("John", "Doe", "New York", "123 Main St", "123456789", "", "12345678A");
+               return new CustomerInfo("Maria", "Perez", "Salamanca", "Calle larga", "123456789", "", "12345678A");
             }
             else
             {
@@ -45,7 +45,7 @@ namespace ChatApp.WebApi.Plugins
 
             //create some lines of code to insert sample values in the consentinoProducts list
             consentinoSupportCases.Add(new SupportCase("1", "Encimera rota", "Closed", true, "9945678B", "Contactar con distribuidor mas cercano para reparacion"));
-            consentinoSupportCases.Add(new SupportCase("2", "Encimera manchada con pintura", "Closed", true, "88345678C", "Limpiar la encimera con acetona."));
+            consentinoSupportCases.Add(new SupportCase("2", "Encimera manchada con pintura", "Closed", true, "88345678C", "Limpiar la encimera con jabon neutro."));
 
             //return the list of products
             return consentinoSupportCases;

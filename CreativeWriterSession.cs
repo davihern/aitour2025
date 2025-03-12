@@ -1,11 +1,17 @@
 using Model;
+using Azure.AI.Inference;
+using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Chat;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using System.Text;
 using Microsoft.SemanticKernel.ChatCompletion;
-
+using OpenTelemetry;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
 {
@@ -30,7 +36,7 @@ public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
         chatHistory.AddUserMessage(
         [
             new Microsoft.SemanticKernel.TextContent(createWriterRequest.supportRequest.Description),
-            new ImageContent(bytes, "image/jpeg"),
+            new Microsoft.SemanticKernel.ImageContent(bytes, "image/jpeg"),
         ]);
         
         StringBuilder sbResearchResults = new();
