@@ -5,14 +5,29 @@
             "name": "YourApp Sample",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/net9.0/aitour2025.dll",
+            "program": "${workspaceFolder}/aitour2025/bin/Debug/net9.0/aitour2025.dll",
             "cwd": "${workspaceFolder}",
-            "launchSettingsFilePath": "${workspaceFolder}/Properties/launchSettings.json",
+            "launchSettingsFilePath": "${workspaceFolder}/aitour2025/Properties/launchSettings.json",
             "launchSettingsProfile": "http",
             "env": {
                 "SemanticKernelModel:ApiKey": "my_value",
                 "ANOTHER_VARIABLE": "another_value"
-                }
+            }
+        },
+        {
+            "name": "Debug aitour2025tests",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/aitour2025tests/bin/Debug/net9.0/aitour2025tests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/aitour2025tests",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "logging": {
+                "moduleLoad": false
+            },
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }
