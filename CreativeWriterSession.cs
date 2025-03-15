@@ -76,12 +76,18 @@ public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
         };
 
         StringBuilder sbMultiAgentResults = new();
+        //create a list of strings to store the results of the chat
+        var chatResults = new List<string>();
         await foreach (ChatMessageContent response in chat.InvokeAsync())
         {
             sbMultiAgentResults.AppendLine(response.Content);
+            chatResults.Add(response.Content);
         }
 
-        return sbMultiAgentResults.ToString();
+        //extract the message before the last from the chatResults list
+        string lastMessage = chatResults[chatResults.Count - 2];
+
+        return lastMessage;
     }
 
     private static PromptTemplateConfig ReadFileForPromptTemplateConfig(string fileName)

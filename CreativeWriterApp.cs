@@ -21,10 +21,10 @@ public class CreativeWriterApp
     {
         IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
         kernelBuilder.AddAzureOpenAIChatCompletion(
-            deploymentName: _configuration["SemanticKernelModel:DeploymentName"],
-            apiKey: _configuration["SemanticKernelModel:ApiKey"],
-            endpoint: _configuration["SemanticKernelModel:Endpoint"],
-            apiVersion: _configuration["SemanticKernelModel:ApiVersion"]
+            deploymentName: _configuration["SemanticKernelModel_DeploymentName"],
+            apiKey: _configuration["SemanticKernelModel_ApiKey"],
+            endpoint: _configuration["SemanticKernelModel_Endpoint"],
+            apiVersion: _configuration["SemanticKernelModel_ApiVersion"]
         );
 
         kernelBuilder.Plugins.AddFromType<ConsentinoAPIPlugin>("ConsentinoProducts");
@@ -32,10 +32,10 @@ public class CreativeWriterApp
 
         IKernelBuilder defaultKernelBuilder = Kernel.CreateBuilder();
         defaultKernelBuilder.AddAzureOpenAIChatCompletion(
-            deploymentName: _configuration["SemanticKernelModel:DeploymentName"],
-            apiKey: _configuration["SemanticKernelModel:ApiKey"],
-            endpoint: _configuration["SemanticKernelModel:Endpoint"],
-            apiVersion: _configuration["SemanticKernelModel:ApiVersion"]
+            deploymentName: _configuration["SemanticKernelModel_DeploymentName"],
+            apiKey: _configuration["SemanticKernelModel_ApiKey"],
+            endpoint: _configuration["SemanticKernelModel_Endpoint"],
+            apiVersion: _configuration["SemanticKernelModel_ApiVersion"]
         );
 
         Kernel defaultKernel = defaultKernelBuilder.Build();

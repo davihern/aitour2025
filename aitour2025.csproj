@@ -1,11 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>$(NoWarn);CA2007;IDE1006;SKEXP0001;SKEXP0110;SKEXP0050;OPENAI001;SKEXP0010</NoWarn>
+    <UserSecretsId>a1c03ec8-6d3e-4ec1-a5c9-de69c7957979</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+  <Content Include="Agents\**" CopyToPublishDirectory="PreserveNewest"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.Inference" Version="1.0.0-beta.3" />

@@ -8,3 +8,16 @@ In order to run this project:
 
 ```
 curl -X POST "http://localhost:5277/api/Products" -H "Content-Type:application/json" -d @sampleCURLrequest.json
+
+
+In order to deploy the project:
+
+docker build -t aitour2025 -f Dockerfile .
+
+docker tag aitour2025:v2 <ACR_NAME>.azurecr.io/aitour2025:v2
+
+az acr login -–name <ACR_NAME>
+
+docker push <ACR_NAME>.azurecr.io/aitour2025
+
+

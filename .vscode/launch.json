@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [        
+        {
+            "name": "YourApp Sample",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/Debug/net9.0/aitour2025.dll",
+            "cwd": "${workspaceFolder}",
+            "launchSettingsFilePath": "${workspaceFolder}/Properties/launchSettings.json",
+            "launchSettingsProfile": "http",
+            "env": {
+                "SemanticKernelModel:ApiKey": "my_value",
+                "ANOTHER_VARIABLE": "another_value"
+                }
+        }
+    ]
+}
