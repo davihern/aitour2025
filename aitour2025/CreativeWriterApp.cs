@@ -21,10 +21,10 @@ public class CreativeWriterApp
     {
         IKernelBuilder consentinoKernelBuilder = Kernel.CreateBuilder();
         consentinoKernelBuilder.AddAzureOpenAIChatCompletion(
-            deploymentName: _configuration["SemanticKernelModel_DeploymentName"],
-            apiKey: _configuration["SemanticKernelModel_ApiKey"],
-            endpoint: _configuration["SemanticKernelModel_Endpoint"],
-            apiVersion: _configuration["SemanticKernelModel_ApiVersion"]
+            deploymentName: _configuration["SemanticKernelModel_Research_DeploymentName"],
+            apiKey: _configuration["SemanticKernelModel_Research_ApiKey"],
+            endpoint: _configuration["SemanticKernelModel_Research_Endpoint"],
+            apiVersion: _configuration["SemanticKernelModel_Research_ApiVersion"]
         );
 
         consentinoKernelBuilder.Plugins.AddFromType<ConsentinoAPIPlugin>("ConsentinoProducts");
