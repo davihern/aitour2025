@@ -1,15 +1,9 @@
 using Model;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Data;
-using Microsoft.SemanticKernel.Embeddings;
-using System.Text.Json;
-using Microsoft.Extensions.VectorData;
 using ChatApp.WebApi.Plugins;
-
 
 public class CreativeWriterApp
 {
-
     private readonly IConfiguration _configuration;
 
     public CreativeWriterApp(IConfiguration configuration)
@@ -19,6 +13,7 @@ public class CreativeWriterApp
 
     public async Task<CreativeWriterSession> CreateSessionAsync()
     {
+        // Create a kernel builder for the Consentino API for function calling and chat completion. This will use gpt-4o-mini
         IKernelBuilder consentinoKernelBuilder = Kernel.CreateBuilder();
         consentinoKernelBuilder.AddAzureOpenAIChatCompletion(
             deploymentName: _configuration["SemanticKernelModel_Research_DeploymentName"],
@@ -27,9 +22,11 @@ public class CreativeWriterApp
             apiVersion: _configuration["SemanticKernelModel_Research_ApiVersion"]
         );
 
+        //Add Consentino API plugin
         consentinoKernelBuilder.Plugins.AddFromType<ConsentinoAPIPlugin>("ConsentinoProducts");
         Kernel Consentinokernel = consentinoKernelBuilder.Build();
 
+        // Create a kernel builder for the default API for chat completion. This will use gpt-4o
         IKernelBuilder defaultKernelBuilder = Kernel.CreateBuilder();
         defaultKernelBuilder.AddAzureOpenAIChatCompletion(
             deploymentName: _configuration["SemanticKernelModel_DeploymentName"],
@@ -42,6 +39,4 @@ public class CreativeWriterApp
 
         return new CreativeWriterSession(defaultKernel, Consentinokernel);
     }
-
- 
 }

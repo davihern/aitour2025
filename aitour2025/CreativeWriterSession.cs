@@ -1,17 +1,10 @@
 using Model;
-using Azure.AI.Inference;
-using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Chat;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using System.Text;
 using Microsoft.SemanticKernel.ChatCompletion;
-using OpenTelemetry;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 
 public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
 {
@@ -76,15 +69,17 @@ public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
         };
 
         StringBuilder sbMultiAgentResults = new();
-        //create a list of strings to store the results of the chat
+//create a list of strings to store the results of the chat
+//create a list of strings to store the results of the chat
         var chatResults = new List<string>();
         await foreach (ChatMessageContent response in chat.InvokeAsync())
         {
             sbMultiAgentResults.AppendLine(response.Content);
             chatResults.Add(response.Content);
+//extract the message before the last from the chatResults list
         }
 
-        //extract the message before the last from the chatResults list
+//extract the message before the last from the chatResults list
         string lastMessage = chatResults[chatResults.Count - 2];
 
         return lastMessage;
@@ -101,9 +96,10 @@ public class CreativeWriterSession(Kernel kernel, Kernel CosentinoKernel)
         return new KernelArguments(new AzureOpenAIPromptExecutionSettings() { FunctionChoiceBehavior = FunctionChoiceBehavior.Required() });
     }
 
-    private sealed class NoFeedbackLeftTerminationStrategy : TerminationStrategy
+    private sealed class NoFeedbackLeftTerminationStrategy : TerminationStrategy// Terminate when the final message contains the term "Article accepted, no further rework necessary." - all done
+
     {
-        // Terminate when the final message contains the term "Article accepted, no further rework necessary." - all done
+// Terminate when the final message contains the term "Article accepted, no further rework necessary." - all done
         protected override Task<bool> ShouldAgentTerminateAsync(Agent agent, IReadOnlyList<ChatMessageContent> history, CancellationToken cancellationToken)
         {
             if (agent.Name != EditorName)

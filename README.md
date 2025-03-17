@@ -21,3 +21,11 @@ az acr login -–name <ACR_NAME>
 docker push <ACR_NAME>.azurecr.io/aitour2025
 
 
+-------------------
+
+In order to evaluate the test and create report:
+
+(If tool is not installed: dotnet tool install --global Microsoft.Extensions.AI.Evaluation.Console --version 0.9.56-preview   )
+
+aieval report --path "C:\Users\davihern\Documents\githubrepos\aitour2025\aitour2025tests\bin\Debug\net9.0\testresult" --output report.html                                                  
+
