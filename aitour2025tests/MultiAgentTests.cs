@@ -112,9 +112,48 @@ private static async Task EvaluateQuestion(SupportRequest supportRequest, Report
 
             createWriterRequest.supportRequest = supportRequest;
             createWriterRequest.Research = supportRequest.Description;
-            createWriterRequest.Writing = "Write receipt for customer as proof that the support cases has been created";
+            createWriterRequest.Writing = @"name: Writer
+template_format: semantic-kernel
+description: >-
+  This writer will write an email with the details provided by the user as a receipt for a support case to be opened.
+input_variables:
+  - name: research_context
+    description: Coontext used for research
+    is_required: true
+  - name: research_results
+    description: Results of the research to get customer information and case details
+    is_required: true
+template: |
+  # Writer Agent
+  You are an expert support specialist in Cosentino, a company that builds components for kitchens and bathrooms. Your job is to help customer in the support cases and incidents they report.
 
-            CreativeWriterApp creativeWriterApp = new CreativeWriterApp(_configuration);
+  # Research
+  {{$research_context}}
+
+  # Research results: data useful to include in the email
+  {{$research_results}}
+
+
+  # Article
+  Write a receipt email to the customer with the details of the support case they are reporting. Do not put placeholders in the email. Write the email as if it were the final version.
+  The receipt should include the following information:
+  - The customer's name (nombre)
+  - The customer's address or city
+  - Description of the issue reported
+  - Image Analysis provided by the customer
+  - Possible solution to the issue
+
+
+  # Final Instructions
+  Try to keep your writing short and to the point. 
+
+  # Review Feedback
+  If you recieved any feedback, your sole responsiblity is to rewrite the article according to review suggestions.
+  - Always apply all review direction
+  - Always revise the content in its entirety without explanation
+";
+
+            SupportApp creativeWriterApp = new SupportApp(_configuration);
 
             var session = await creativeWriterApp.CreateSessionAsync();
 
@@ -125,7 +164,7 @@ private static async Task EvaluateQuestion(SupportRequest supportRequest, Report
     EvaluationResult evalResult = await scenario.EvaluateAsync(
         [new ChatMessage(ChatRole.User, createWriterRequest.Writing)],
         new ChatResponse(new ChatMessage(ChatRole.Assistant, finalAnswer)),
-        additionalContext: [new GroundednessEvaluatorContext("Maria Perez is the user that created the support request, Calle Larga is the address, Salamanca is the city. Best solution is to clean it with soap and water."), new GroundednessEvaluatorContext("The support request is about a countertop with paint stains"), new EquivalenceEvaluatorContext("The receipt should contain the user's name: Maria, the address: Calle Larga, the city: Salamanca, and the solution to the support request.")],
+        additionalContext: [new GroundednessEvaluatorContext("Maria Perez is the user that created the support request, Calle Larga is the address, Salamanca is the city. Best solution is to clean it with soap and water. The support request is about a countertop with paint stains. The solution: Para la limpieza diaria: utiliza un paño suave o una esponja con agua y jabón neutro."),new EquivalenceEvaluatorContext("The receipt should contain the user's name: Maria, the address: Calle Larga, the city: Salamanca, and the solution to the support request.")],
         cancellationToken);
 
     // Assert that the evaluator was able to successfully generate an analysis

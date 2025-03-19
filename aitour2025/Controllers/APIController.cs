@@ -15,7 +15,7 @@ public class ProductsController : ControllerBase
 {
 
     private readonly IDeserializer _yamlDeserializer;
-    private readonly CreativeWriterApp _creativeWriterApp;
+    private readonly SupportApp _creativeWriterApp;
 
 
     //constructor
@@ -25,7 +25,7 @@ public class ProductsController : ControllerBase
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
 
-            _creativeWriterApp = new CreativeWriterApp(configuration);
+            _creativeWriterApp = new SupportApp(configuration);
 
     }
 

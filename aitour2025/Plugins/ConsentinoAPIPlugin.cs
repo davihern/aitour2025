@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.SemanticKernel;
 
 
@@ -6,7 +7,6 @@ namespace ChatApp.WebApi.Plugins
     public class ConsentinoAPIPlugin()
     {
    
-
         [KernelFunction("get_customer_information_by_dni")]
         public async Task<CustomerInfo> GetCustomerInformationByDNIAsync(string DNI)
         {

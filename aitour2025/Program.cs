@@ -10,43 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 var appInsightsConnectionString = builder.Configuration["AppInsights"];
 
 AppContext.SetSwitch("Microsoft.SemanticKernel.Experimental.GenAI.EnableOTelDiagnosticsSensitive", true);
-AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true); 
-AppContext.SetSwitch("Azure.Experimental.TraceGenAIMessageContent", true);
 
 builder.Services.AddApplicationInsightsTelemetry();
 
 var resourceBuilder = ResourceBuilder
     .CreateDefault()
-    .AddService("TelemetryApplicationInsightsQuickstart");
+    .AddService("AITour2025DemoApp");
 
-using var traceProvider = Sdk.CreateTracerProviderBuilder()
+using var skTraceProvider = Sdk.CreateTracerProviderBuilder()
     .SetResourceBuilder(resourceBuilder)
     .AddSource("Microsoft.SemanticKernel*")
     .AddAzureMonitorTraceExporter(options => options.ConnectionString = appInsightsConnectionString)
     .Build();
 
-using var meterProvider = Sdk.CreateMeterProviderBuilder()
+using var skMeterProvider = Sdk.CreateMeterProviderBuilder()
     .SetResourceBuilder(resourceBuilder)
     .AddMeter("Microsoft.SemanticKernel*")
     .AddAzureMonitorMetricExporter(options => options.ConnectionString = appInsightsConnectionString)
     .Build();
 
-
-// using var traceProvider2 = Sdk.CreateTracerProviderBuilder()
-//     .AddHttpClientInstrumentation()
-//     .AddSource("Azure.AI.Inference.*")
-//     .ConfigureResource(r => r.AddService("sample"))
-//     .AddAzureMonitorTraceExporter(options => options.ConnectionString = appInsightsConnectionString)
-//     .AddOtlpExporter()
-//     .Build();
-
-// using var meterProvider2 = Sdk.CreateMeterProviderBuilder()
-//     .AddHttpClientInstrumentation()
-//     .AddMeter("Azure.AI.Inference.*")
-//     .ConfigureResource(r => r.AddService("sample"))
-//     .AddAzureMonitorMetricExporter(options => options.ConnectionString = appInsightsConnectionString)
-//     .AddOtlpExporter()
-//     .Build();
 
 using var loggerFactory = LoggerFactory.Create(builder =>
 {

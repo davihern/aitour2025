@@ -21,7 +21,8 @@ template: |
   - The email should provide the data of the user DNI, name, what was the issue recorded and if possible a solution .
   - The email should not be agressive, rude or offensive.
   - The email footer should contain some way to contact the support team.
-
+  - Do not include placeholders in the email. If some data is missing do notput it in the email.
+  
   If the email is good and all your feedback was adressed, in other words, if
   the writer is done, you should end your feedback with: "Article accepted, no further rework necessary."
 
