@@ -10,25 +10,26 @@ var builder = WebApplication.CreateBuilder(args);
 var appInsightsConnectionString = builder.Configuration["AppInsights"];
 
 AppContext.SetSwitch("Microsoft.SemanticKernel.Experimental.GenAI.EnableOTelDiagnosticsSensitive", true);
+AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true); 
+AppContext.SetSwitch("Azure.Experimental.TraceGenAIMessageContent", true);
 
 builder.Services.AddApplicationInsightsTelemetry();
 
 var resourceBuilder = ResourceBuilder
     .CreateDefault()
-    .AddService("AITour2025DemoApp");
+    .AddService("TelemetryApplicationInsightsQuickstart");
 
-using var skTraceProvider = Sdk.CreateTracerProviderBuilder()
+using var traceProvider = Sdk.CreateTracerProviderBuilder()
     .SetResourceBuilder(resourceBuilder)
     .AddSource("Microsoft.SemanticKernel*")
     .AddAzureMonitorTraceExporter(options => options.ConnectionString = appInsightsConnectionString)
     .Build();
 
-using var skMeterProvider = Sdk.CreateMeterProviderBuilder()
+using var meterProvider = Sdk.CreateMeterProviderBuilder()
     .SetResourceBuilder(resourceBuilder)
     .AddMeter("Microsoft.SemanticKernel*")
     .AddAzureMonitorMetricExporter(options => options.ConnectionString = appInsightsConnectionString)
     .Build();
-
 
 using var loggerFactory = LoggerFactory.Create(builder =>
 {

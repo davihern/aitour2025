@@ -11,7 +11,6 @@ using Microsoft.Extensions.AI;
 using Microsoft.ML.Tokenizers;
 using Microsoft.Extensions.AI.Evaluation.Reporting.Storage;
 using Microsoft.Extensions.Configuration;
-using Model;
 
 namespace aitour2025tests;
 
@@ -44,7 +43,6 @@ public class MultiAgentTests : IAsyncLifetime
     [Fact]
     public async Task TestMultiAgentResponse()
     {
-
 
     // Construct a reporting configuration to support the evaluation
     var reportingConfiguration = GetReportingConfiguration();
@@ -103,16 +101,35 @@ static ReportingConfiguration GetReportingConfiguration()
 }
 
 private static async Task EvaluateQuestion(SupportRequest supportRequest, ReportingConfiguration reportingConfiguration, CancellationToken cancellationToken)
-{
-    // Create a new ScenarioRun to represent each evaluation run.
-    await using ScenarioRun scenario = await reportingConfiguration.CreateScenarioRunAsync($"Question_{supportRequest.DNI}", cancellationToken: cancellationToken);
+    {
+        // Create a new ScenarioRun to represent each evaluation run.
+        await using ScenarioRun scenario = await reportingConfiguration.CreateScenarioRunAsync($"Question_{supportRequest.DNI}", cancellationToken: cancellationToken);
 
-    // Run the sample through the assistant to generate a response.
-    CreateWriterRequest createWriterRequest = new CreateWriterRequest();
+        (CreateWriterRequest createWriterRequest, string finalAnswer) = await CallAIToGenerateEmail(supportRequest);
 
-            createWriterRequest.supportRequest = supportRequest;
-            createWriterRequest.Research = supportRequest.Description;
-            createWriterRequest.Writing = @"name: Writer
+        // Invoke the evaluators
+        EvaluationResult evalResult = await scenario.EvaluateAsync(
+            [new ChatMessage(ChatRole.User, createWriterRequest.Writing)],
+            new ChatResponse(new ChatMessage(ChatRole.Assistant, finalAnswer)),
+            additionalContext: [new GroundednessEvaluatorContext("Maria is the user that created the support request, Calle Larga is the address, Salamanca is the city. Best solution is to clean it with soap and water. The support request is about a countertop with paint stains. The solution: Para la limpieza diaria: utiliza un paño suave o una esponja con agua y jabón neutro."), new EquivalenceEvaluatorContext("The receipt should contain the user's name: Maria, the address: Calle Larga, the city: Salamanca, and the solution to the support request.")],
+            cancellationToken);
+
+        // Assert that the evaluator was able to successfully generate an analysis
+        Assert.False(evalResult.Metrics.Values.Any(m => m.Interpretation?.Rating == EvaluationRating.Inconclusive), "Model response was inconclusive");
+
+        // Assert that the evaluators did not report any diagnostic errors
+        Assert.False(evalResult.ContainsDiagnostics(d => d.Severity == EvaluationDiagnosticSeverity.Error), "Evaluation had errors.");
+
+    }
+
+    private static async Task<(CreateWriterRequest createWriterRequest, string finalAnswer)> CallAIToGenerateEmail(SupportRequest supportRequest)
+    {
+        // Run the sample through the assistant to generate a response.
+        CreateWriterRequest createWriterRequest = new CreateWriterRequest();
+
+        createWriterRequest.supportRequest = supportRequest;
+        createWriterRequest.Research = supportRequest.Description;
+        createWriterRequest.Writing = @"name: Writer
 template_format: semantic-kernel
 description: >-
   This writer will write an email with the details provided by the user as a receipt for a support case to be opened.
@@ -153,26 +170,11 @@ template: |
   - Always revise the content in its entirety without explanation
 ";
 
-            SupportApp creativeWriterApp = new SupportApp(_configuration);
+        SupportApp creativeWriterApp = new SupportApp(_configuration);
 
-            var session = await creativeWriterApp.CreateSessionAsync();
+        var session = await creativeWriterApp.CreateSessionAsync();
 
-            string finalAnswer = await session.ProcessStreamingRequest(createWriterRequest);
-    
-
-    // Invoke the evaluators
-    EvaluationResult evalResult = await scenario.EvaluateAsync(
-        [new ChatMessage(ChatRole.User, createWriterRequest.Writing)],
-        new ChatResponse(new ChatMessage(ChatRole.Assistant, finalAnswer)),
-        additionalContext: [new GroundednessEvaluatorContext("Maria Perez is the user that created the support request, Calle Larga is the address, Salamanca is the city. Best solution is to clean it with soap and water. The support request is about a countertop with paint stains. The solution: Para la limpieza diaria: utiliza un paño suave o una esponja con agua y jabón neutro."),new EquivalenceEvaluatorContext("The receipt should contain the user's name: Maria, the address: Calle Larga, the city: Salamanca, and the solution to the support request.")],
-        cancellationToken);
-
-    // Assert that the evaluator was able to successfully generate an analysis
-    Assert.False(evalResult.Metrics.Values.Any(m => m.Interpretation?.Rating == EvaluationRating.Inconclusive), "Model response was inconclusive");
-
-    // Assert that the evaluators did not report any diagnostic errors
-    Assert.False(evalResult.ContainsDiagnostics(d => d.Severity == EvaluationDiagnosticSeverity.Error), "Evaluation had errors.");
-
-}
-
+        string finalAnswer = await session.ProcessStreamingRequest(createWriterRequest);
+        return (createWriterRequest, finalAnswer);
+    }
 }

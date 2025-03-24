@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "program": "${workspaceFolder}/aitour2025/bin/Debug/net9.0/aitour2025.dll",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/aitour2025",
             "launchSettingsFilePath": "${workspaceFolder}/aitour2025/Properties/launchSettings.json",
             "launchSettingsProfile": "http",
             "env": {

@@ -35,6 +35,7 @@ namespace ChatApp.WebApi.Plugins
         }
 
         [KernelFunction("get_cosentino_supportcases")]
+        [Description("Get all the support cases, useful to get possible solutions to the customer")]
         public async Task<List<SupportCase>> GetCosentinoSupportCasesAsync()
         {
             //build a variable to hold the result of this method, which is a list of products

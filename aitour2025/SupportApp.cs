@@ -1,4 +1,3 @@
-using Model;
 using Microsoft.SemanticKernel;
 using ChatApp.WebApi.Plugins;
 
