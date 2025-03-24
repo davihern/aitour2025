@@ -38,7 +38,7 @@ az acr build --image crv4vo6cy6fh5b2.azurecr.io/aitour2025:v4 --registry crv4vo6
 
 docker push crv4vo6cy6fh5b2.azurecr.io/aitour2025:v4
 
-az containerapp up --name aitour2025 --image crv4vo6cy6fh5b2.azurecr.io/aitour2025:v4 --resource-group rg-acaaitour2025 --environment cae-v4vo6cy6fh5b2 --ingress external --target-port 8080  --env-vars SemanticKernelModel_Research_ApiKey="26b196281b3b4b44b0d4646fd166a9f6" SemanticKernelModel_ApiKey="26b196281b3b4b44b0d4646fd166a9f6" AppInsights="InstrumentationKey=4a3c0545-3b0e-44c0-9f2d-d289c9d907e2;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=18759ebe-aece-4f6f-b29a-1ab9403215a4" 
+az containerapp up --name aitour2025 --image crv4vo6cy6fh5b2.azurecr.io/aitour2025:v4 --resource-group rg-acaaitour2025 --environment cae-v4vo6cy6fh5b2 --ingress external --target-port 8080  --env-vars SemanticKernelModel_Research_ApiKey="XXX" SemanticKernelModel_ApiKey="XXX" AppInsights="InstrumentationKey=XXX;IngestionEndpoint=https://swedencentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://swedencentral.livediagnostics.monitor.azure.com/;ApplicationId=XXX" 
 
 -------------------
 
@@ -48,3 +48,28 @@ In order to evaluate the test and create report:
 
 aieval report --path "C:\Users\davihern\Documents\githubrepos\aitour2025\aitour2025tests\bin\Debug\net9.0\testresult" --output report.html                                                  
 
+----------------------------------
+
+Create an Azure Container Apps with ACR image
+
+
+set LOCATION="swedencentral"
+set RESOURCE_GROUP="aitour2025"
+set IDENTITY_NAME="aitour2025-identity"
+set ENVIRONMENT="aitour2025-environment"
+set REGISTRY_NAME="aitour2025registry"
+set CONTAINER_APP_NAME="aitour2025-app"
+
+az extension add --name containerapp --upgrade
+
+az identity create --name %IDENTITY_NAME% --resource-group %RESOURCE_GROUP% --output none
+
+
+az identity show --name %IDENTITY_NAME% --resource-group %RESOURCE_GROUP% --query id --output tsv
+
+set IDENTITY_ID=
+
+az containerapp env create --name %ENVIRONMENT% --resource-group %RESOURCE_GROUP% --location %LOCATION% --mi-user-assigned %IDENTITY_ID% --output none
+
+
+az acr create --resource-group %RESOURCE_GROUP% --name %REGISTRY_NAME% --sku Basic --output none
