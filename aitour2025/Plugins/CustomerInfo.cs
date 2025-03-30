@@ -1,4 +1,3 @@
-//create a c# class for CustomerInfo, it should have the name, surname, city, address, phone number, email, and DNI
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ namespace ChatApp.WebApi.Plugins
     public class CustomerInfo
     {
 
-        //create a contructor for the class with all the field
+       
         public CustomerInfo(string name, string surname, string city, string address, string phoneNumber, string email, string dNI)
         {
             Name = name;

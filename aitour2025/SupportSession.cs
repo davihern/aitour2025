@@ -74,8 +74,6 @@ public class SupportSession(Kernel kernel, Kernel CosentinoKernel)
 
     }
 
-    
-
     public async Task<string> WriteEmailRequest(EmailRequest emailRequest)
     {
        

@@ -1,5 +1,3 @@
-//Create a c# class for Support Cases, it should have the following fields: case number, case description, case status, IsSolved, customerDNI and solution
-
 using System;
 using System.Collections.Generic;
 using System.Text;
