@@ -1,3 +1,5 @@
+
+
 In order to run this project:
 
 1) Change the settings in appsettings.json to match your OpenAI API key and endpoint
