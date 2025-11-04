@@ -1,0 +1,44 @@
+# Azure Configuration
+location            = "swedencentral"
+resource_group_name = "aitour2025"
+
+# Container Registry (must be globally unique and alphanumeric)
+registry_name = "aitour2025registry"
+registry_sku  = "Basic"
+
+# Container Apps Environment
+environment_name = "aitour2025-environment"
+
+# Managed Identity
+identity_name = "aitour2025-identity"
+
+# Container App
+container_app_name  = "aitour2025-app"
+container_image_name = "aitour2025"
+container_image_tag  = "latest"
+container_cpu        = 0.5
+container_memory     = "1Gi"
+min_replicas         = 1
+max_replicas         = 10
+
+# AI/ML Configuration - Semantic Kernel Model
+semantic_kernel_endpoint          = "https://YOUR-ENDPOINT.openai.azure.com"
+semantic_kernel_api_key           = "your-api-key-here"
+semantic_kernel_deployment_name   = "gpt-4o"
+semantic_kernel_api_version       = "2024-08-01-preview"
+
+# AI/ML Configuration - Semantic Kernel Research Model
+semantic_kernel_research_endpoint        = "https://YOUR-ENDPOINT.openai.azure.com"
+semantic_kernel_research_api_key         = "your-research-api-key-here"
+semantic_kernel_research_deployment_name = "gpt-4o-mini"
+semantic_kernel_research_api_version     = "2024-08-01-preview"
+
+# Monitoring
+app_insights_connection_string = "InstrumentationKey=your-key;IngestionEndpoint=https://your-region.in.applicationinsights.azure.com/"
+
+# Tags
+tags = {
+  Environment = "Development"
+  Project     = "AITour2025"
+  ManagedBy   = "Terraform"
+}

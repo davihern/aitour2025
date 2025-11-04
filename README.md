@@ -31,6 +31,25 @@ curl -X "POST" "https://aitour2025-app.delightfulbay-be099704.swedencentral.azur
 
 ### In order to deploy the project into Azure Container Apps:
 
+#### Option 1: Using Terraform (Recommended)
+
+For automated, repeatable infrastructure deployment, use the Terraform configuration in the `terraform/` directory.
+
+See the [Terraform README](terraform/README.md) for detailed instructions.
+
+Quick start:
+```bash
+cd terraform
+# Copy and edit the example config
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars with your values
+terraform init
+terraform plan
+terraform apply
+```
+
+#### Option 2: Using Azure CLI (Manual)
+
 Windows Command Prompt:
 ``` bash
 
